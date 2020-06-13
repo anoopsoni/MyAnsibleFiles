@@ -1,3 +1,20 @@
 Hi
 This is my experiment with Ansible playbooks 
 
+## Main Configuration files
+1. /etc/ansible/ansible.cfg #contains all configuration details 
+2. /etc/ansible/hosts       #It's inventory files which contains hosts , groups list
+
+## Commands
+
+#to check the connectivity of target machine
+
+1. ansible -i hots all -m ping  
+2. ansible <group/machine> -m <module> -a <args>
+
+3. ansible all -a "df -kh" -i /etc/ansible/hosts
+4. ansible all -m ping -i /etc/ansible/hosts 
+5. ansible all -a "sudo which nginx " -i /etc/ansible/hosts
+
+
+   ansible <hosts/machine> -a <command> -i hosts -u <user_name> 
