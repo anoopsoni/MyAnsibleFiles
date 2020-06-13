@@ -1,0 +1,43 @@
+---
+
+- hosts: all
+  gather_facts: False
+  remote_user: ubuntu
+  become: yes
+  become_user: root
+  become_method: sudo
+
+  vars:
+   site_name: "tutorialinux"
+   site_title: "Hope."
+   site_url: "www.tutorialinux.com"
+
+  tasks:
+   - name: Install nginx
+     package: name=nginx state=latest
+
+   - name: Create website directory
+     file: path="/var/www/{{ site_name }}" state=directory mode=0755
+
+   - name: create main nginx config file
+     template:
+      src: "template/nginx.conf" 
+      dest: "/etc/nginx/nginx.conf"
+     notify:
+      - restart nginx
+
+   - name: Create vhost config file
+     template:
+      src: "template/index.html"
+      dest: "/var/www/{{ site_name }}/index.html"
+
+   - name: Remove default nginx vhost configuration
+     file: path=/etc/nginx/sites-enabled/default state=absent
+     notify:
+      - restart nginx
+   
+  handlers:
+   - name: restart nginx 
+     service:
+      name: nginx
+      state: restarted 
